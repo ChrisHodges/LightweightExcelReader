@@ -1,0 +1,14 @@
+packages
+.dat.nosync2f74.xLTf8v
+LightweightExcelReader/bin
+LightweightExcelReaderTests/bin
+LightweightExcelReaderTests/obj
+LightweightExcelReader/obj
+.vs/
+LightweightExcelReader.Tests/bin/
+LightweightExcelReader.Tests/obj/
+LightweightExcelReader.NetStandard/bin/
+LightweightExcelReader.NetStandard/obj/
+LightweightExcelReader.Benchmarks/bin
+LightweightExcelReader.Benchmarks/obj
+.idea/

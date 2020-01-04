@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
+      <PackageReference Include="DocumentFormat.OpenXml" Version="2.10.0-beta0002" />
+      <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+      <PackageReference Include="GemBox.Spreadsheet" Version="45.0.0.1069" />
+      <PackageReference Include="Koogra" Version="3.1.5.1" />
+      <PackageReference Include="NPOI.Excel" Version="2.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="TestSpreadsheets\TestSpreadsheet1.xlsx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LightweightExcelReader\LightweightExcelReader.csproj" />
+    </ItemGroup>
+
+</Project>
