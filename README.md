@@ -49,13 +49,13 @@ while (sheetReader.ReadNextInRow()) {
 //Get data for a specific cell:
 object cellA1Value = sheetReader["A1"];
 
-//For a range:
+//for a range:
 IEnumerable<object> cellsFromA1ToD4 = sheetReader["A1","D4"];
 
-//for a row:
+//or a row:
 IEnumerable<object> row3 = sheetReader.Row(3);
 
-//orr a column:
+//or a column:
 IEnumerable<object> columnB = sheetReader.Column("B");
 
 ```
@@ -63,7 +63,7 @@ IEnumerable<object> columnB = sheetReader.Column("B");
 You bet. We've aimed to create the fastest Excel reader for .Net, and we think we've succeeded. Included in the repo is a [Benchmark Dot Net](https://github.com/dotnet/BenchmarkDotNet) benchmarking that compares the performance of  **LightweightExcelReader** to [OpenXml](https://www.nuget.org/packages/DocumentFormat.OpenXml/), [ExcelDataReader](https://github.com/ExcelDataReader/ExcelDataReader) and a good old fashioned [OleDbDataAdapter](https://docs.microsoft.com/en-us/dotnet/api/system.data.oledb.oledbdataadapter?view=netframework-4.8). The benchmark reads a 500 row spreadsheet to memory. On a 2.7 GHz Quad-Core Intel Core i7 laptop running Windows 10, the results looked like this:
 
 | Package                  |  Operation |
-|--------------------------|------------|
+|--------------------------|-----------:|
 |  OpenXml                 | 8.109 ms   |
 |  ExcelDataReader         | 6.225 ms   |
 |  OleDbDataAdapter        | 52.833 ms  |
@@ -73,8 +73,15 @@ You bet. We've aimed to create the fastest Excel reader for .Net, and we think w
 LightweightExcelReader is right for you if:
 
 * You only want to read Excel data - you don't want to create or edit a spreadsheet.
-* You only need to read .xlsx format files (Excel 2007 and later).
-* You don't want to convert a spreadsheet into an array of objects.
+* You only need to read .xlsx format files (Excel 2007 and later). If you need to read old style .xls files, 
+* You don't want to map spreadsheet data into a collection of objects.
+
+If you want to map a spreadsheet to a collection of objects, use [ExcelDataReader](https://github.com/ExcelDataReader/ExcelDataReader)
+
+If you want to create or edit Excel spreadsheets, we recommend [ClosedXml](https://github.com/ClosedXML/ClosedXML).
+
+If you need to read old-style .xls files, try [ExcelDataReader](https://github.com/ExcelDataReader/ExcelDataReader)
+
 
 
 ### Support
