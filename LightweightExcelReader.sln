@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightweightExcelReader.Tests", "LightweightExcelReader.Tests\LightweightExcelReader.Tests.csproj", "{55F781DD-970C-4AD0-AD77-CEE1AB986972}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightweightExcelReader.Benchmarks", "LightweightExcelReader.Benchmarks\LightweightExcelReader.Benchmarks.csproj", "{C6FDE025-1770-4A9F-AAE4-4764F14121A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightweightExcelReader.Benchmarks", "LightweightExcelReader.Benchmarks\LightweightExcelReader.Benchmarks.csproj", "{C6FDE025-1770-4A9F-AAE4-4764F14121A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightweightExcelReader", "LightweightExcelReader\LightweightExcelReader.csproj", "{D2584CFD-9A72-4133-9E20-185B48A6EB0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightweightExcelReader", "LightweightExcelReader\LightweightExcelReader.csproj", "{D2584CFD-9A72-4133-9E20-185B48A6EB0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
