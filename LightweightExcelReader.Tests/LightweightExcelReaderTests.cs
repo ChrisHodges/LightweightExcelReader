@@ -69,7 +69,7 @@ namespace LightweighExcelReaderTests
             }
 
             exception.Should().NotBe(null);
-            exception.Message.Should().Be("Sheet with zero-based index 999 not found in the workbook. Workbook contains 5 sheets    ");
+            exception.Message.Should().Be("Sheet with zero-based index 999 not found in the workbook. Workbook contains 5 sheets");
         }
 
         [Fact]
