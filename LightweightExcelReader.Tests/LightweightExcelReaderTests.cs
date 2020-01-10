@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using FluentAssertions;
 using LightWeightExcelReader;
+using LightWeightExcelReader.Exceptions;
 using Xunit;
 
 namespace LightweighExcelReaderTests
@@ -29,6 +30,46 @@ namespace LightweighExcelReaderTests
             lightWeightExcelReader["Sheet4DuplicateStringValue"]["A2"].Should().Be("abc123");
             lightWeightExcelReader["Sheet4DuplicateStringValue"]["D4"].Should().Be(9.876);
             lightWeightExcelReader["Sheet4DuplicateStringValue"]["C3"].Should().Be(new DateTime(2015, 10, 9));
+        }
+        
+        [Fact]
+        public void NonExistingSheetThrowsMeaningfulError()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            LightweightExcelReaderSheetNotFoundException exception = null;
+            try
+            {
+                var sheet = lightWeightExcelReader["ThisSheetDoesNotExist"];
+                var test = sheet["A1"];
+            }
+            catch (Exception e)
+            {
+                exception = e as LightweightExcelReaderSheetNotFoundException;
+            }
+
+            exception.Should().NotBe(null);
+            exception.Message.Should().Be("Sheet with name 'ThisSheetDoesNotExist' was not found in the workbook");
+        }
+        
+        [Fact]
+        public void NonExistingSheetIndexThrowsMeaningfulError()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            LightweightExcelReaderSheetNotFoundException exception = null;
+            try
+            {
+                var sheet = lightWeightExcelReader[999];
+                var test = sheet["A1"];
+            }
+            catch (Exception e)
+            {
+                exception = e as LightweightExcelReaderSheetNotFoundException;
+            }
+
+            exception.Should().NotBe(null);
+            exception.Message.Should().Be("Sheet with zero-based index 999 not found in the workbook. Workbook contains 5 sheets    ");
         }
 
         [Fact]

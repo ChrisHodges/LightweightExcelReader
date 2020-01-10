@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using LightWeightExcelReader.Exceptions;
 
 namespace LightWeightExcelReader
 {
@@ -48,8 +49,7 @@ namespace LightWeightExcelReader
 
             if (_worksheetEntries.Length <= i)
             {
-                throw new ArgumentOutOfRangeException(
-                    $"Zero-indexed spreadsheet number {i} requested but workbook only contains {_worksheetEntries.Length} spreadsheets.");
+                throw new LightweightExcelReaderSheetNotFoundException(i, _worksheetEntries.Length);
             }
 
             _openWorksheetStreams.Add(i, _worksheetEntries[i].Open());

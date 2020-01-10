@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using LightWeightExcelReader.Exceptions;
 
 namespace LightWeightExcelReader
 {
@@ -104,7 +105,7 @@ namespace LightWeightExcelReader
 
                 if (!sheetNumber.HasValue)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new LightweightExcelReaderSheetNotFoundException(sheetName);
                 }
 
                 if (_sheetReadersByInteger.ContainsKey(sheetNumber.Value))
