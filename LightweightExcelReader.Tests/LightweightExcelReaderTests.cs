@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -69,7 +70,16 @@ namespace LightweighExcelReaderTests
             }
 
             exception.Should().NotBe(null);
-            exception.Message.Should().Be("Sheet with zero-based index 999 not found in the workbook. Workbook contains 5 sheets");
+            exception.Message.Should().Be("Sheet with zero-based index 999 not found in the workbook. Workbook contains 10 sheets");
+        }
+
+        [Fact]
+        public void MoreThanNineSheetsWorks()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet10 = lightWeightExcelReader["Sheet10"];
+            sheet10["A2"].Should().Be("SHEET10Values");
         }
 
         [Fact]

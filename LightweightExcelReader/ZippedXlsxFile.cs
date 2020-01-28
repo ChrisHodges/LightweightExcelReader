@@ -68,8 +68,11 @@ namespace LightWeightExcelReader
         private void Initialize()
         {
             _archive = new ZipArchive(_fileStream, ZipArchiveMode.Read);
+            //CSH 28012020 - We order by the length of the name string then by the name itself, so that Sheet10 appears immediately
+            //after Sheet9 rather than after Sheet1
             _worksheetEntries = _archive.Entries.Where(x => x.FullName.StartsWith("xl/worksheets/sheet"))
-                .OrderBy(x => x.Name)
+                .OrderBy(x => x.Name.Length)
+                .ThenBy(x => x.Name)
                 .ToArray();
             SharedStringsStream =
                 new XslxSharedStringsStream(
