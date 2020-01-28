@@ -76,7 +76,7 @@ LightweightExcelReader is right for you if:
 * You only need to read .xlsx format files (Excel 2007 and later). If you need to read old style .xls files, 
 * You don't want to map spreadsheet data into a collection of objects.
 
-If you want to map a spreadsheet to a collection of objects, use [ExcelDataReader](https://github.com/ExcelDataReader/ExcelDataReader)
+If you want to map a spreadsheet to a collection of objects, use our sister project, [ExcelToEnumerable](https://github.com/ChrisHodges/ExcelToEnumerable)
 
 If you want to create or edit Excel spreadsheets, we recommend [ClosedXml](https://github.com/ClosedXML/ClosedXML).
 
