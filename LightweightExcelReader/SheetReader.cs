@@ -125,6 +125,10 @@ namespace LightWeightExcelReader
         private object GetValueFromCell(string nodeType, string sType)
         {
             object value;
+            if (string.IsNullOrEmpty(_xmlReader.Value))
+            {
+                return null;
+            }
             switch (nodeType)
             {
                 case "str":
