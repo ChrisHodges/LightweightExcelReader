@@ -162,6 +162,11 @@ namespace LightWeightExcelReader
                     Value = GetValueFromCell(nodeType, sType);
                 }
 
+                if (_xmlReader.IsStartOfElement("t"))
+                {
+                    ReadAndLogRowNumber();
+                    Value = _xmlReader.Value;
+                }
                 if (_xmlReader.IsEndOfElement("c"))
                 {
                     break;
