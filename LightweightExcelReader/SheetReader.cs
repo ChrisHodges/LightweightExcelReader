@@ -131,8 +131,21 @@ namespace LightWeightExcelReader
             }
             switch (nodeType)
             {
+                case "d":
+                    value = DateTime.Parse(_xmlReader.Value);
+                    break;
                 case "str":
                     value = _xmlReader.Value;
+                    break;
+                case null:
+                    if (sType != null && _xlsxIsDateTimeStream[int.Parse(sType)])
+                    {
+                        value = DateTime.FromOADate(double.Parse(_xmlReader.Value));
+                    }
+                    else
+                    {
+                        value = double.Parse(_xmlReader.Value);
+                    }
                     break;
                 case "s":
                     value = _xlsxSharedStringsStream[int.Parse(_xmlReader.Value)];
