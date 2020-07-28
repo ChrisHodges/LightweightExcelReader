@@ -154,5 +154,10 @@ namespace LightWeightExcelReader
 
             return null;
         }
+
+        public int? GetFirstDateTimeStyle()
+        {
+            return _zippedXlsxFile.IsDateTimeStream.GetFirstDateTimeStyle();
+        }
     }
 }

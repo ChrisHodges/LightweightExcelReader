@@ -2,13 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using ExcelNumberFormat;
 
 namespace LightWeightExcelReader
 {
-    public class XslxIsDateTimeStream : IDictionary<int, bool>
+
+    public class XslxIsDateTimeStream : IDictionary<int, bool>, IEnumerator<KeyValuePair<int, bool>>
     {
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        object IEnumerator.Current { get; }
+        public KeyValuePair<int, bool> Current { get; private set; }
+        
         private readonly Dictionary<string, bool> _formatDictionary = new Dictionary<string, bool>
         {
             {"0", false},
@@ -53,7 +63,7 @@ namespace LightWeightExcelReader
 
         public IEnumerator<KeyValuePair<int, bool>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -68,7 +78,6 @@ namespace LightWeightExcelReader
 
         public void Clear()
         {
-            throw new NotImplementedException();
         }
 
         public bool Contains(KeyValuePair<int, bool> item)
@@ -109,6 +118,33 @@ namespace LightWeightExcelReader
             throw new NotImplementedException();
         }
 
+        private void HandleReadingXfElement()
+        {
+            _readIndex++;
+            var fmtId = _xmlReader.GetAttribute("numFmtId");
+            _storedKeys[_readIndex] = _formatDictionary[fmtId];
+            Current = new KeyValuePair<int, bool>(_readIndex, _storedKeys[_readIndex]);
+        }
+
+        public bool MoveNext()
+        {
+            if (!_readingCellXfs)
+            {
+                AdvanceXmlReaderToCellXfs();
+            }
+            
+            while (_xmlReader.Read())
+            {
+                if (_readingCellXfs && _xmlReader.IsStartOfElement("xf"))
+                {
+                    HandleReadingXfElement();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool this[int key]
         {
             get
@@ -126,7 +162,7 @@ namespace LightWeightExcelReader
         public ICollection<int> Keys { get; }
         public ICollection<bool> Values { get; }
 
-        private bool AdvanceToIndex(int key)
+        private void AdvanceXmlReaderToCellXfs()
         {
             while (_xmlReader.Read())
             {
@@ -138,17 +174,26 @@ namespace LightWeightExcelReader
                             new NumberFormat(_xmlReader.GetAttribute("formatCode")).IsDateTimeFormat);
                     }
                 }
-
+                
                 if (_xmlReader.IsStartOfElement("cellXfs"))
                 {
                     _readingCellXfs = true;
+                    break;
                 }
+            }
+        }
 
+        private bool AdvanceToIndex(int key)
+        {
+            if (!_readingCellXfs)
+            {
+                AdvanceXmlReaderToCellXfs();
+            }
+            while (_xmlReader.Read())
+            {
                 if (_readingCellXfs && _xmlReader.IsStartOfElement("xf"))
                 {
-                    _readIndex++;
-                    var fmtId = _xmlReader.GetAttribute("numFmtId");
-                    _storedKeys[_readIndex] = _formatDictionary[fmtId];
+                    HandleReadingXfElement();
                     if (_readIndex == key)
                     {
                         return _storedKeys[_readIndex];
@@ -157,6 +202,31 @@ namespace LightWeightExcelReader
             }
 
             throw new KeyNotFoundException($"The key '{key}' was not found in the dictionary");
+        }
+
+        public int? GetFirstDateTimeStyle()
+        {
+            foreach (var item in _storedKeys)
+            {
+                if (item.Value)
+                {
+                    return item.Key;
+                }
+            }
+
+            while (MoveNext())
+            {
+                if (Current.Value)
+                {
+                    return Current.Key;
+                }
+            }
+
+            return default;
+        }
+
+        public void Dispose()
+        {
         }
     }
 }
