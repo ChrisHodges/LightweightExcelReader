@@ -94,6 +94,17 @@ namespace LightweighExcelReaderTests
         }
 
         [Fact]
+        public void BooleansWork()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("Booleans.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            lightWeightExcelReader["Sheet1"]["A1"].Should().Be(0);
+            lightWeightExcelReader["Sheet1"]["A2"].Should().Be(1);
+            lightWeightExcelReader["Sheet1"]["B1"].Should().Be(false);
+            lightWeightExcelReader["Sheet1"]["B2"].Should().Be(true);
+        }
+
+        [Fact]
         public void GetOfficePrefixedSheetWorks()
         {
             var testFileLocation = TestHelper.TestsheetPath("OfficePrefixedSheetText.xlsx");
