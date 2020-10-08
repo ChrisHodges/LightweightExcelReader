@@ -32,6 +32,14 @@ namespace LightweighExcelReaderTests
             lightWeightExcelReader["Sheet4DuplicateStringValue"]["D4"].Should().Be(9.876);
             lightWeightExcelReader["Sheet4DuplicateStringValue"]["C3"].Should().Be(new DateTime(2015, 10, 9));
         }
+
+        [Fact]
+        public void IsoStandardDateWorks()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ISOStandardDateTest.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            lightWeightExcelReader["Data"]["B2"].Should().Be(new DateTime(2013,3,3));
+        }
         
         [Fact]
         public void NonExistingSheetThrowsMeaningfulError()
@@ -126,6 +134,18 @@ namespace LightweighExcelReaderTests
             var testFileLocation = TestHelper.TestsheetPath("TestCurrencySpreadsheet.xlsx");
             var lightWeightExcelReader = new ExcelReader(testFileLocation);
             lightWeightExcelReader["BlankSheet"]["A1"].Should().Be(null);
+        }
+
+        [Fact] public void GetFirstDateTimeStyleWorks()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            lightWeightExcelReader.GetFirstDateTimeStyle().Should().Be(2);
+            var sheet1 = lightWeightExcelReader["Sheet1"];
+            sheet1["A2"].Should().Be("abc123");
+            sheet1["D4"].Should().Be(5);
+            sheet1["C3"].Should().Be(new DateTime(2015, 10, 9));
+            sheet1["C4"].Should().Be(null);
         }
 
         [Fact]
