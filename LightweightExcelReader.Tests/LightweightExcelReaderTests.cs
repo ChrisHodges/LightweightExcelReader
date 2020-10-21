@@ -1,9 +1,11 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using FluentAssertions;
 using LightWeightExcelReader;
 using LightWeightExcelReader.Exceptions;
@@ -110,6 +112,21 @@ namespace LightweighExcelReaderTests
             lightWeightExcelReader["Sheet1"]["A2"].Should().Be(1);
             lightWeightExcelReader["Sheet1"]["B1"].Should().Be(false);
             lightWeightExcelReader["Sheet1"]["B2"].Should().Be(true);
+        }
+
+        [Fact]
+        public void GermanDecimalsWork()
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE"); 
+            var testFileLocation = TestHelper.TestsheetPath("GermanDecimals.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader["Sheet1"];
+            sheet["A2"].Should().Be(1.234);
+            sheet["B2"].Should().Be(1.234);
+            sheet["C2"].Should().Be("1,234");
+            sheet["A3"].Should().Be(9.876);
+            sheet["B3"].Should().Be(9.876);
+            sheet["C3"].Should().Be("9,876");
         }
 
         [Fact]

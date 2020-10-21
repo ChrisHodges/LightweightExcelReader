@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -157,7 +158,7 @@ namespace LightWeightExcelReader
                     }
                     else
                     {
-                        value = double.Parse(_xmlReader.Value);
+                        value = double.Parse(_xmlReader.Value, CultureInfo.InvariantCulture);
                     }
 
                     break;
