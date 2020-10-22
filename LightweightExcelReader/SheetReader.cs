@@ -123,6 +123,21 @@ namespace LightWeightExcelReader
         /// </summary>
         public int? PreviousRowNumber { get; private set; }
 
+        private object ReadNumericValueFromSpreadsheet(string sType)
+        {
+            object value;
+            if (sType != null && _xlsxIsDateTimeStream[int.Parse(sType)])
+            {
+                value = DateTime.FromOADate(double.Parse(_xmlReader.Value));
+            }
+            else
+            {
+                value = double.Parse(_xmlReader.Value, CultureInfo.InvariantCulture);
+            }
+
+            return value;
+        }
+
         private object GetValueFromCell(string nodeType, string sType)
         {
             object value;
@@ -138,29 +153,11 @@ namespace LightWeightExcelReader
                 case "str":
                     value = _xmlReader.Value;
                     break;
-                case null:
-                    if (sType != null && _xlsxIsDateTimeStream[int.Parse(sType)])
-                    {
-                        value = DateTime.FromOADate(double.Parse(_xmlReader.Value));
-                    }
-                    else
-                    {
-                        value = double.Parse(_xmlReader.Value);
-                    }
-                    break;
                 case "s":
                     value = _xlsxSharedStringsStream[int.Parse(_xmlReader.Value)];
                     break;
                 default:
-                    if (sType != null && _xlsxIsDateTimeStream[int.Parse(sType)])
-                    {
-                        value = DateTime.FromOADate(double.Parse(_xmlReader.Value));
-                    }
-                    else
-                    {
-                        value = double.Parse(_xmlReader.Value, CultureInfo.InvariantCulture);
-                    }
-
+                    value = ReadNumericValueFromSpreadsheet(sType);
                     break;
             }
 

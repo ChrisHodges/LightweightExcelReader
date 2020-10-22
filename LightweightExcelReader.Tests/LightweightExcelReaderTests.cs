@@ -128,6 +128,16 @@ namespace LightweighExcelReaderTests
             sheet["B3"].Should().Be(9.876);
             sheet["C3"].Should().Be("9,876");
         }
+        
+        [Fact]
+        public void GermanDecimalsWorkAlternativeSheetFormat()
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE"); 
+            var testFileLocation = TestHelper.TestsheetPath("doubletest.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader["Tabelle1"];
+            sheet["G3"].Should().Be(289.99);
+        }
 
         [Fact]
         public void GetOfficePrefixedSheetWorks()

@@ -77,6 +77,9 @@
     <Compile Include="XslxlsDateTimeStreamtests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestSpreadsheets\doubletest.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestSpreadsheets\GermanDecimals.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
