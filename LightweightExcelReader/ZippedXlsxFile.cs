@@ -74,9 +74,10 @@ namespace LightWeightExcelReader
                 .OrderBy(x => x.Name.Length)
                 .ThenBy(x => x.Name)
                 .ToArray();
-            SharedStringsStream =
-                new XslxSharedStringsStream(
-                    _archive.Entries.First(x => x.FullName.EndsWith("sharedStrings.xml")).Open());
+            var sharedStringsEntry = _archive.Entries.FirstOrDefault(x => x.FullName.EndsWith("sharedStrings.xml"));
+            if (sharedStringsEntry != null) {
+            SharedStringsStream = new XslxSharedStringsStream(sharedStringsEntry.Open());
+            }
             IsDateTimeStream =
                 new XslxIsDateTimeStream(_archive.Entries.First(x => x.FullName.EndsWith("styles.xml")).Open());
         }

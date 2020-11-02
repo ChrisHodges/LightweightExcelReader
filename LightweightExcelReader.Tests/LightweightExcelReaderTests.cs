@@ -193,6 +193,15 @@ namespace LightweighExcelReaderTests
         }
 
         [Fact]
+        public void LargeDoubleReadsCorrectly()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("LargeDouble.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet1 = lightWeightExcelReader[0];
+            sheet1["A1"].Should().Be(7060151014090010);
+        }
+
+        [Fact]
         public void RangeWorks()
         {
             var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
