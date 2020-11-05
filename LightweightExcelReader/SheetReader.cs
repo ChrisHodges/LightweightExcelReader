@@ -345,5 +345,23 @@ namespace LightWeightExcelReader
             Value = null;
             return false;
         }
+
+        public bool ContainsKey(string cellRefString)
+        {
+            var cellRef = new CellRef(cellRefString);
+            if (cellRef.ColumnNumber > WorksheetDimension.BottomRight.ColumnNumber ||
+                    cellRef.Row > WorksheetDimension.BottomRight.Row)
+            {
+                return false;
+            }
+
+            var result = this[cellRefString];
+            if (result == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

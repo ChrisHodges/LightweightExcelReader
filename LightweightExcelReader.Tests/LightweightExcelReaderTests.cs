@@ -169,6 +169,17 @@ namespace LightweighExcelReaderTests
             var testFileLocation = TestHelper.TestsheetPath("TestCurrencySpreadsheet.xlsx");
             var lightWeightExcelReader = new ExcelReader(testFileLocation);
             lightWeightExcelReader["BlankSheet"]["A1"].Should().Be(null);
+            lightWeightExcelReader["BlankSheet"].ContainsKey("A1").Should().BeFalse();
+        }
+
+        [Fact]
+        public void ContainsKeyWorks()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet1 = lightWeightExcelReader["Sheet1"];
+            sheet1.ContainsKey("A2").Should().Be(true);
+            sheet1.ContainsKey("AA20000").Should().Be(false);
         }
 
         [Fact] public void GetFirstDateTimeStyleWorks()
