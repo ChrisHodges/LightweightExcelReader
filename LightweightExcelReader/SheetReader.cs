@@ -156,6 +156,9 @@ namespace LightWeightExcelReader
                 case "s":
                     value = _xlsxSharedStringsStream[int.Parse(_xmlReader.Value)];
                     break;
+                case "b":
+                    value = _xmlReader.Value == "1";
+                    break;
                 default:
                     value = ReadNumericValueFromSpreadsheet(sType);
                     break;

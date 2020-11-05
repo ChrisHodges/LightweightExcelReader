@@ -104,6 +104,14 @@ namespace LightweighExcelReaderTests
         }
 
         [Fact]
+        public void BooleansWithFormatCodeBWork()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TypeBBooleans.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            lightWeightExcelReader["sheet"]["A1"].Should().Be(true);
+        }
+
+        [Fact]
         public void BooleansWork()
         {
             var testFileLocation = TestHelper.TestsheetPath("Booleans.xlsx");
