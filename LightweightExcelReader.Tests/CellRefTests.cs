@@ -1,12 +1,37 @@
+using System;
 using System.Linq;
 using FluentAssertions;
-using LightWeightExcelReader;
+using LightweightExcelReader;
 using Xunit;
 
 namespace LightweighExcelReaderTests
 {
     public class CellRefTests
     {
+        [Fact]
+        public void SendingInvalidStringToConstructorThrowsMeaningfulException()
+        {
+            Action action = () =>
+            {
+                var cellRef = new CellRef("Not a valid cell ref");
+            };
+            action.Should().Throw<FormatException>();
+        }
+
+        [Fact]
+        public void IntegerConstructorWorks()
+        {
+            var cellRef = new CellRef(1,1);
+            cellRef.ToString().Should().Be("A1");
+        }
+        
+        [Fact]
+        public void RowNumberWorks()
+        {
+            var cellRef = new CellRef(86,86);
+            cellRef.ColumnNumber.Should().Be(86);
+        }
+
         [Fact]
         public void AddColumnsWorks()
         {
@@ -56,16 +81,11 @@ namespace LightweighExcelReaderTests
         [Fact]
         public void RangeWorks()
         {
-            var range = CellRef.Range("AA1", "AC3").ToArray();
-            range[0].ToString().Should().Be("AA1");
-            range[1].ToString().Should().Be("AB1");
-            range[2].ToString().Should().Be("AC1");
-            range[3].ToString().Should().Be("AA2");
-            range[4].ToString().Should().Be("AB2");
-            range[5].ToString().Should().Be("AC2");
-            range[6].ToString().Should().Be("AA3");
-            range[7].ToString().Should().Be("AB3");
-            range[8].ToString().Should().Be("AC3");
+            var range = CellRef.Range("A1", "B2").ToArray();
+            range[0].ToString().Should().Be("A1");
+            range[1].ToString().Should().Be("B1");
+            range[2].ToString().Should().Be("A2");
+            range[3].ToString().Should().Be("B2");
         }
 
         [Fact]

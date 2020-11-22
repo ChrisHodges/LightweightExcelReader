@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using LightWeightExcelReader;
+using LightweightExcelReader;
 using Xunit;
 
 namespace LightweighExcelReaderTests

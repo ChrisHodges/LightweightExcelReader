@@ -9,7 +9,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using ExcelDataReader;
 using GemBox.Spreadsheet;
-using LightWeightExcelReader;
+using LightweightExcelReader;
 using Net.SourceForge.Koogra;
 using NPOI.XSSF.UserModel;
 

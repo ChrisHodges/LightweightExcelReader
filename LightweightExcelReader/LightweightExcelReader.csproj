@@ -4,6 +4,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.1</Version>
     <PackageId>LightweightExcelReader</PackageId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>ChrisHodges</Authors>
     <Product>LightweightExcelReader</Product>
     <Description>The fastest way to read Excel data in .Net</Description>

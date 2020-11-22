@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Xml;
-using LightWeightExcelReader.Exceptions;
 
-namespace LightWeightExcelReader
+[assembly:InternalsVisibleTo("LightweightExcelReader.Tests")]
+
+namespace LightweightExcelReader
 {
     /// <summary>
     /// A reader for the entire workbook. Access an individual worksheet by the worksheet name indexer,
@@ -105,7 +107,7 @@ namespace LightWeightExcelReader
 
                 if (!sheetNumber.HasValue)
                 {
-                    throw new LightweightExcelReaderSheetNotFoundException(sheetName);
+                    throw new ArgumentOutOfRangeException(nameof(sheetName), $"Sheet with name '{sheetName}' was not found in the workbook");
                 }
 
                 if (_sheetReadersByInteger.ContainsKey(sheetNumber.Value))
@@ -155,7 +157,9 @@ namespace LightWeightExcelReader
             return null;
         }
 
+#pragma warning disable 1591
         public int? GetFirstDateTimeStyle()
+#pragma warning restore 1591
         {
             return _zippedXlsxFile.IsDateTimeStream.GetFirstDateTimeStyle();
         }

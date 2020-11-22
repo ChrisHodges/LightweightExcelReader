@@ -1,8 +1,8 @@
 using System.Xml;
 
-namespace LightWeightExcelReader
+namespace LightweightExcelReader
 {
-    public static class XmlReaderExtensionMethods
+    internal static class XmlReaderExtensionMethods
     {
         public static bool IsStartOfElement(this XmlReader xmlReader, string elementName)
         {

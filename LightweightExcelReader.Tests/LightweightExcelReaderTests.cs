@@ -1,14 +1,11 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using FluentAssertions;
-using LightWeightExcelReader;
-using LightWeightExcelReader.Exceptions;
+using LightweightExcelReader;
 using Xunit;
 
 namespace LightweighExcelReaderTests
@@ -48,7 +45,7 @@ namespace LightweighExcelReaderTests
         {
             var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
             var lightWeightExcelReader = new ExcelReader(testFileLocation);
-            LightweightExcelReaderSheetNotFoundException exception = null;
+            ArgumentOutOfRangeException exception = null;
             try
             {
                 var sheet = lightWeightExcelReader["ThisSheetDoesNotExist"];
@@ -56,11 +53,11 @@ namespace LightweighExcelReaderTests
             }
             catch (Exception e)
             {
-                exception = e as LightweightExcelReaderSheetNotFoundException;
+                exception = e as ArgumentOutOfRangeException;
             }
 
             exception.Should().NotBe(null);
-            exception.Message.Should().Be("Sheet with name 'ThisSheetDoesNotExist' was not found in the workbook");
+            exception.Message.Should().StartWith("Sheet with name 'ThisSheetDoesNotExist' was not found in the workbook");
         }
         
         [Fact]
@@ -68,7 +65,7 @@ namespace LightweighExcelReaderTests
         {
             var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
             var lightWeightExcelReader = new ExcelReader(testFileLocation);
-            LightweightExcelReaderSheetNotFoundException exception = null;
+            ArgumentOutOfRangeException exception = null;
             try
             {
                 var sheet = lightWeightExcelReader[999];
@@ -76,11 +73,11 @@ namespace LightweighExcelReaderTests
             }
             catch (Exception e)
             {
-                exception = e as LightweightExcelReaderSheetNotFoundException;
+                exception = e as ArgumentOutOfRangeException;
             }
 
             exception.Should().NotBe(null);
-            exception.Message.Should().Be("Sheet with zero-based index 999 not found in the workbook. Workbook contains 10 sheets");
+            exception.Message.Should().StartWith("Sheet with zero-based index 999 was not found in the workbook. Workbook contains 10 sheets");
         }
 
         [Fact]

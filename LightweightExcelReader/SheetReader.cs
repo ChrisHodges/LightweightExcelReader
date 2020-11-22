@@ -6,8 +6,18 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace LightWeightExcelReader
+namespace LightweightExcelReader
 {
+    /// <summary>
+    /// Reads values from a spreadsheet
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var workbookReader = new ExcelReader("Path/To/Workbook");
+    /// var sheetReader = workbookReader["Sheet1"];
+    /// var cellA1 = sheetReader["A1"];
+    /// </code>
+    /// </example>
     public class SheetReader
     {
         private readonly Dictionary<string, object> _values;
@@ -15,7 +25,7 @@ namespace LightWeightExcelReader
         private readonly XslxSharedStringsStream _xlsxSharedStringsStream;
         private readonly XmlReader _xmlReader;
 
-        public SheetReader(Stream sheetXmlStream, XslxSharedStringsStream xlsxSharedStringsStream,
+        internal SheetReader(Stream sheetXmlStream, XslxSharedStringsStream xlsxSharedStringsStream,
             XslxIsDateTimeStream xlsxIsDateTimeStream)
         {
             _xlsxSharedStringsStream = xlsxSharedStringsStream;
@@ -26,15 +36,15 @@ namespace LightWeightExcelReader
         }
 
         /// <summary>
-        ///     Returns the value of the cell at the given address, e.g. sheetReader["C3"] returns the value
-        ///     of the cell at C3, if present, or null if the cell is empty
+        ///     Indexer. Returns the value of the cell at the given address, e.g. sheetReader["C3"] returns the value
+        ///     of the cell at C3, if present, or null if the cell is empty.
         /// </summary>
         /// <param name="cellAddress">
-        ///     The address of the cell
+        ///     The address of the cell.
         /// </param>
         /// <exception cref="IndexOutOfRangeException">
         ///     Will throw if the requested index is beyond the used range of the workbook. Avoid this exception by checking the
-        ///     WorksheetDimension or Max/MinRow and Max/MinColumnNumber properties
+        ///     WorksheetDimension or Max/MinRow and Max/MinColumnNumber properties.
         /// </exception>
         public object this[string cellAddress]
         {
@@ -58,10 +68,15 @@ namespace LightWeightExcelReader
         }
 
         /// <summary>
-        ///     Get a list of cell values covered by the range in the index, e.g. sheetReader["A1","C3"] will return a list of nine
+        ///     Get a list of cell values covered by the range in the index, e.g. sheetReader["A1","B2"] will return a list of four
         ///     values,
-        ///     going left-to-right and then top-to-bottom, of the values A1, A2, A3, B1, B2, B3, C1, C2, C3
+        ///     going left-to-right and then top-to-bottom, from the cells A1, B1, A2, B2.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var range = sheetReader["A1","B2"];
+        /// </code>
+        /// </example>
         /// <param name="topLeft">The top left cell of the required range</param>
         /// <param name="bottomRight">The bottom right cell of the required range</param>
         public IEnumerable<object> this[string topLeft, string bottomRight]
@@ -75,7 +90,7 @@ namespace LightWeightExcelReader
         }
 
         /// <summary>
-        ///     A WorksheetDimension object representing the used range of the worksheet
+        ///     A <see cref="WorksheetDimension"/> representing the used range of the worksheet
         /// </summary>
         public WorksheetDimension WorksheetDimension { get; private set; }
 
@@ -311,7 +326,7 @@ namespace LightWeightExcelReader
         /// <summary>
         /// Gets a list of all the cell values in the specified row
         /// </summary>
-        /// <param name="row">The row index</param>
+        /// <param name="row">The 1-based row index</param>
         /// <returns>An enumerable of objects representing the values of cells in the row</returns>
         public IEnumerable<object> Row(int row)
         {
@@ -346,6 +361,11 @@ namespace LightWeightExcelReader
             return false;
         }
 
+        /// <summary>
+        /// Returns <c>true</c> if the specified cell contains a non-null value.
+        /// </summary>
+        /// <param name="cellRefString"></param>
+        /// <returns></returns>
         public bool ContainsKey(string cellRefString)
         {
             var cellRef = new CellRef(cellRefString);

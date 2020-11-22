@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 
-namespace LightWeightExcelReader
+namespace LightweightExcelReader
 {
-    public interface IZippedXslxFile : IDisposable
+    internal interface IZippedXlsxFile : IDisposable
     {
         Stream WorkbookXml { get; }
         XslxSharedStringsStream SharedStringsStream { get; }

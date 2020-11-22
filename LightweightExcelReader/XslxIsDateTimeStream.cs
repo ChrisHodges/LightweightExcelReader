@@ -6,10 +6,10 @@ using System.Linq;
 using System.Xml;
 using ExcelNumberFormat;
 
-namespace LightWeightExcelReader
+namespace LightweightExcelReader
 {
 
-    public class XslxIsDateTimeStream : IDictionary<int, bool>, IEnumerator<KeyValuePair<int, bool>>
+    internal class XslxIsDateTimeStream : IDictionary<int, bool>, IEnumerator<KeyValuePair<int, bool>>
     {
         public void Reset()
         {
