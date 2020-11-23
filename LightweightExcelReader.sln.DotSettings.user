@@ -1,13 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=652f3996_002D1f41_002D4a06_002D8f9b_002Dd711fc5dcedc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SendingInvalidStringToConstructorThrowsMeaningfulError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::55F781DD-970C-4AD0-AD77-CEE1AB986972::.NETFramework,Version=v4.7.2::LightweighExcelReaderTests.CellRefTests.SendingInvalidStringToConstructorThrowsMeaningfulError&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::55F781DD-970C-4AD0-AD77-CEE1AB986972::.NETFramework,Version=v4.7.2::LightweighExcelReaderTests.CellRefTests.IntegerConstructorWorks&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::55F781DD-970C-4AD0-AD77-CEE1AB986972::.NETFramework,Version=v4.7.2::LightweighExcelReaderTests.CellRefTests.IntegerConstructorWithInvalidArgumentsThrowsMeaningfulExceptionWorks&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::55F781DD-970C-4AD0-AD77-CEE1AB986972::.NETFramework,Version=v4.7.2::LightweighExcelReaderTests.CellRefTests.RowNumberWorks&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::55F781DD-970C-4AD0-AD77-CEE1AB986972::.NETFramework,Version=v4.7.2::LightweighExcelReaderTests.CellRefTests.RangeWorks&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::55F781DD-970C-4AD0-AD77-CEE1AB986972::.NETFramework,Version=v4.7.2::LightweighExcelReaderTests.LightweightExcelReaderTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=652f3996_002D1f41_002D4a06_002D8f9b_002Dd711fc5dcedc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SendingInvalidStringToConstructorThrowsMeaningfulError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=819c2682_002Da902_002D4189_002D91a5_002D126fb1cc49d2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NonExistingSheetThrowsMeaningfulError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;

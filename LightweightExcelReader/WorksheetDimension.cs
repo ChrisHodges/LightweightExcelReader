@@ -1,3 +1,5 @@
+using SpreadsheetCellRef;
+
 namespace LightweightExcelReader
 {
     /// <summary>
