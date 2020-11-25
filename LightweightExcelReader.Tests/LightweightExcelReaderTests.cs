@@ -418,5 +418,38 @@ namespace LightweighExcelReaderTests
                 list.Add(sheet.Value);
             }
         }
+
+        [Fact]
+        public void FormulaReturnNullResultsIsIgnored()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("FormulaReturningNullResultTest.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader[0];
+            sheet.Value.Should().BeNull();
+            sheet.WorksheetDimension.TopLeft.ToString().Should().Be("A1");
+            sheet.WorksheetDimension.BottomRight.ToString().Should().Be("D7");
+            
+            sheet.ReadNext();
+            sheet.Value.Should().Be(1);
+            sheet.Address.Should().Be("A1");
+
+            sheet.ReadNext();
+            sheet.Value.Should().Be(2);
+            sheet.Address.Should().Be("C3");
+
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A4");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A5");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A6");
+            
+            var result = sheet.ReadNext();
+            sheet.Value.Should().BeNull();
+            result.Should().BeFalse();
+
+        }
     }
 }

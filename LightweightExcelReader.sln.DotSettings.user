@@ -2,7 +2,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=652f3996_002D1f41_002D4a06_002D8f9b_002Dd711fc5dcedc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SendingInvalidStringToConstructorThrowsMeaningfulError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=819c2682_002Da902_002D4189_002D91a5_002D126fb1cc49d2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NonExistingSheetThrowsMeaningfulError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=819c2682_002Da902_002D4189_002D91a5_002D126fb1cc49d2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="NonExistingSheetThrowsMeaningfulError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f6009521_002D7bae_002D4a4b_002D867a_002Dc8f36fdca6ee/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="BooleansWork" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

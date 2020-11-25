@@ -188,17 +188,17 @@ namespace LightweightExcelReader
             var sType = _xmlReader.GetAttribute("s");
             var nodeType = _xmlReader.GetAttribute("t");
             Address = _xmlReader.GetAttribute("r");
-            while (ReadAndLogRowNumber())
+            while (ReadNextXmlElementAndLogRowNumber())
             {
                 if (_xmlReader.IsStartOfElement("v"))
                 {
-                    ReadAndLogRowNumber();
+                    ReadNextXmlElementAndLogRowNumber();
                     Value = GetValueFromCell(nodeType, sType);
                 }
 
                 if (_xmlReader.IsStartOfElement("t"))
                 {
-                    ReadAndLogRowNumber();
+                    ReadNextXmlElementAndLogRowNumber();
                     Value = _xmlReader.Value;
                 }
                 if (_xmlReader.IsEndOfElement("c"))
@@ -208,7 +208,7 @@ namespace LightweightExcelReader
             }
         }
 
-        private bool ReadAndLogRowNumber()
+        private bool ReadNextXmlElementAndLogRowNumber()
         {
             var result = _xmlReader.Read();
             if (_xmlReader.IsStartOfElement("row"))
@@ -223,7 +223,7 @@ namespace LightweightExcelReader
         private object GetValue(string address)
         {
             var cellRef = new CellRef(address);
-            while (ReadAndLogRowNumber())
+            while (ReadNextXmlElementAndLogRowNumber())
             {
                 if (_xmlReader.IsStartOfElement("c") && !_xmlReader.IsEmptyElement)
                 {
@@ -250,11 +250,15 @@ namespace LightweightExcelReader
         /// <returns>False if all cells have been read, true otherwise</returns>
         public bool ReadNext()
         {
-            while (ReadAndLogRowNumber())
+            while (ReadNextXmlElementAndLogRowNumber())
             {
                 if (_xmlReader.IsStartOfElement("c") && !_xmlReader.IsEmptyElement)
                 {
                     GetCellAttributesAndReadValue();
+                    if (Value == null)
+                    {
+                        return ReadNext();
+                    }
                     _values[Address] = Value;
                     return true;
                 }
@@ -274,7 +278,7 @@ namespace LightweightExcelReader
 
         private void GetDimension()
         {
-            while (ReadAndLogRowNumber())
+            while (ReadNextXmlElementAndLogRowNumber())
             {
                 if (_xmlReader.IsStartOfElement("dimension"))
                 {
@@ -355,7 +359,7 @@ namespace LightweightExcelReader
                 {
                     break;
                 }
-            } while (ReadAndLogRowNumber());
+            } while (ReadNextXmlElementAndLogRowNumber());
 
             Address = null;
             Value = null;
