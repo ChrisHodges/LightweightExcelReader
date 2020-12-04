@@ -1,5 +1,6 @@
 using FluentAssertions;
 using LightweightExcelReader;
+using LightweightExcelReader.Tests;
 using Xunit;
 
 namespace LightweighExcelReaderTests

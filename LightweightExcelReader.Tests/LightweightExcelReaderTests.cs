@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using LightweightExcelReader;
+using LightweightExcelReader.Tests;
 using Xunit;
 
 namespace LightweighExcelReaderTests
@@ -449,7 +450,15 @@ namespace LightweighExcelReaderTests
             var result = sheet.ReadNext();
             sheet.Value.Should().BeNull();
             result.Should().BeFalse();
-
+        }
+        
+        [Fact]
+        public void ReadsNowFormulaCorrectly()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("Now.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader[0];
+            sheet["A1"].Should().Be(new DateTime(2020, 12, 04,16,52,07, 977));
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using LightweightExcelReader;
+using LightweightExcelReader.Tests;
 using Xunit;
 
 namespace LightweighExcelReaderTests

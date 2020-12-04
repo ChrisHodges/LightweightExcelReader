@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 
-namespace LightweighExcelReaderTests
+namespace LightweightExcelReader.Tests
 {
     public static class TestHelper
     {
