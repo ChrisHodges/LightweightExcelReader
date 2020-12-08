@@ -6,7 +6,8 @@ namespace LightweightExcelReader.Benchmarks
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<ReadNextPerformance>();
+            //BenchmarkRunner.Run<ReadNextPerformance>();
+            BenchmarkRunner.Run<Benchmarks>();
         }
     }
 }
