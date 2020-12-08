@@ -1,11 +1,9 @@
 using FluentAssertions;
-using LightweightExcelReader;
-using LightweightExcelReader.Tests;
 using Xunit;
 
-namespace LightweightExcelReaderTests
+namespace LightweightExcelReader.Tests
 {
-    public class XslxlsDateTimeStreamtests
+    public class XlsxDateTimeStreamtests
     {
         private XslxIsDateTimeStream _subject = new XslxIsDateTimeStream(TestHelper.TestXmlContent("Styles.xml"));
 

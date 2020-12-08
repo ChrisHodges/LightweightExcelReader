@@ -24,4 +24,13 @@
       <ProjectReference Include="..\LightweightExcelReader\LightweightExcelReader.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="TestSpreadsheets\MassiveFile.xlsx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TestSpreadsheets\MassiveFileFull.xlsx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

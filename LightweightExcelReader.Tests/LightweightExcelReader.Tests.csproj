@@ -78,7 +78,7 @@
     <Compile Include="LightweightExcelReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
-    <Compile Include="XslxlsDateTimeStreamtests.cs" />
+    <Compile Include="XlsxDateTimeStreamtests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestSpreadsheets\doubletest.xlsx">
