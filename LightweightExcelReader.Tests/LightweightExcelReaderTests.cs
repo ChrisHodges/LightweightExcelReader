@@ -5,11 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
-using LightweightExcelReader;
-using LightweightExcelReader.Tests;
 using Xunit;
 
-namespace LightweighExcelReaderTests
+namespace LightweightExcelReader.Tests
 {
     public class LightweightExcelReaderTests
     {
@@ -459,6 +457,231 @@ namespace LightweighExcelReaderTests
             var lightWeightExcelReader = new ExcelReader(testFileLocation);
             var sheet = lightWeightExcelReader[0];
             sheet["A1"].Should().Be(new DateTime(2020, 12, 04,16,52,07, 977));
+        }
+
+        [Fact]
+        public void ReadNextBehaviourSkipNullsWorksCorrectly()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader[0];
+            sheet.ReadNext();
+            sheet.Value.Should().Be("A1");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("B1");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("C1");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("D1");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("E1");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("A2");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("C2");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("E2");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("A3");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("C3");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("A5");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("B5");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("C5");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("D5");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("E5");
+        }
+        
+        [Fact]
+        public void CellReadThenReadNextWorks()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader[0];
+            sheet["D5"].Should().Be("D5");
+            sheet.Value.Should().Be("D5");
+            sheet.ReadNext();
+            sheet.Value.Should().Be("E5");
+        }
+        
+        [Fact]
+        public void ReadNextBehaviourReadsNextCorrectlyAfterAccessingViaIndexer()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["B2"].Should().Be(null);
+
+            sheet.ReadNext();
+            sheet.Address.Should().Be("C2");
+            sheet.Value.Should().Be("C2");
+        }
+
+        [Fact]
+        public void AddressIsSameAsIndexerForNullValues()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation);
+            var sheet = lightWeightExcelReader[0];
+            sheet["E3"].Should().Be(null);
+            sheet.Address.Should().Be("E3");
+            sheet.Value.Should().Be(null);
+        }
+
+        [Fact]
+        public void ReadNextBehaviourReadAllNullsClearsNextPopulatedCellIfCursorAdvancedBeyondIt()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["E3"].Should().Be(null);
+            sheet.Address.Should().Be("E3");
+            sheet.NextPopulatedCellRef.Should().BeNull();
+        }
+        
+        [Fact]
+        public void ReadNextBehaviourReadAllNullsReadsNextLineAfterReadNext()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["D3"].Should().BeNull();
+            sheet.Address.Should().Be("D3");
+            sheet.Value.Should().Be(null);
+            sheet.AddressCelRef.ToString().Should().Be("D3");
+
+            sheet.ReadNext();
+            sheet.Address.Should().Be("E3");
+            sheet.Value.Should().Be(null);
+            sheet.AddressCelRef.ToString().Should().Be("E3");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A4");
+            sheet.Value.Should().Be(null);
+            sheet.AddressCelRef.ToString().Should().Be("A4");
+        }
+
+        [Fact]
+        public void ReadNextBehaviourReadAllNullsWorksReadsNextLine()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["E3"].Should().Be(null);
+            sheet.Address.Should().Be("E3");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A4");
+            sheet.Value.Should().Be(null);
+        }
+
+        [Fact]
+        public void ReadNextBehaviourReadAllNullsWorksCorrectly()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["A2"].Should().Be("A2");
+            sheet.Value.Should().Be("A2");
+            
+            sheet.ReadNext();
+            sheet.Value.Should().Be(null);
+            sheet.Address.Should().Be("B2");
+            
+            sheet.ReadNext();
+            sheet.Value.Should().Be("C2");
+            sheet.Address.Should().Be("C2");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("D2");
+            sheet.Value.Should().Be(null);
+           
+            sheet.ReadNext();
+            sheet.Address.Should().Be("E2");
+            sheet.Value.Should().Be("E2");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A3");
+            sheet.Value.Should().Be("A3");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("B3");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("C3");
+            sheet.Value.Should().Be("C3");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("D3");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("E3");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A4");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("B4");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("C4");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("D4");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("E4");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A5");
+            sheet.Value.Should().Be("A5");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("B5");
+            sheet.Value.Should().Be("B5");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("C5");
+            sheet.Value.Should().Be("C5");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("D5");
+            sheet.Value.Should().Be("D5");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("E5");
+            sheet.Value.Should().Be("E5");
+
+            sheet.ReadNext().Should().BeFalse();
         }
     }
 }

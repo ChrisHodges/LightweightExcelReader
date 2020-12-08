@@ -35,12 +35,11 @@ namespace LightweightExcelReader
         /// Construct an ExcelReader from a Stream
         /// </summary>
         /// <param name="stream">A stream pointing towards an xlsx format workbook</param>
-
         public ExcelReader(Stream stream)
         {
             _zippedXlsxFile = new ZippedXlsxFile(stream);
         }
-        
+
         /// <summary>
         /// Get a SheetReader instance representing the worksheet at the given zero-based index
         /// </summary>
@@ -65,7 +64,7 @@ namespace LightweightExcelReader
                 }
 
                 var sheetReader = new SheetReader(_zippedXlsxFile.GetWorksheetStream(sheetNumber),
-                    _zippedXlsxFile.SharedStringsStream, _zippedXlsxFile.IsDateTimeStream);
+                    _zippedXlsxFile.SharedStringsStream, _zippedXlsxFile.IsDateTimeStream, ReadNextBehaviour);
                 _sheetReadersByInteger.Add(sheetNumber, sheetReader);
                 return sheetReader;
             }
@@ -117,11 +116,17 @@ namespace LightweightExcelReader
                 }
 
                 var sheetReader = new SheetReader(_zippedXlsxFile.GetWorksheetStream(sheetNumber.Value),
-                    _zippedXlsxFile.SharedStringsStream, _zippedXlsxFile.IsDateTimeStream);
+                    _zippedXlsxFile.SharedStringsStream, _zippedXlsxFile.IsDateTimeStream, ReadNextBehaviour);
                 _sheetReadersByInteger.Add(sheetNumber.Value, sheetReader);
                 return sheetReader;
             }
         }
+
+        /// <summary>
+        /// Defines how the reader will handle null cells when using <c>SheetReader.ReadNext()</c>
+        /// and <c>SheetReader.ReadNextInRow()</c>
+        /// </summary>
+        public ReadNextBehaviour ReadNextBehaviour { get; set; }
 
         private int? ReadSheetNumberFromXml(string sheetName)
         {

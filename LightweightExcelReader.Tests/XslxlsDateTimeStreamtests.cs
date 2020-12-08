@@ -3,7 +3,7 @@ using LightweightExcelReader;
 using LightweightExcelReader.Tests;
 using Xunit;
 
-namespace LightweighExcelReaderTests
+namespace LightweightExcelReaderTests
 {
     public class XslxlsDateTimeStreamtests
     {

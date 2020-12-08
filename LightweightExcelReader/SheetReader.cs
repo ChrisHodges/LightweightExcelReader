@@ -21,18 +21,24 @@ namespace LightweightExcelReader
     /// </example>
     public class SheetReader
     {
+        private static Regex _digitsRegex = new Regex(@"[0-9]");
         private readonly Dictionary<string, object> _values;
         private readonly XslxIsDateTimeStream _xlsxIsDateTimeStream;
         private readonly XslxSharedStringsStream _xlsxSharedStringsStream;
         private readonly XmlReader _xmlReader;
+        private ReadNextBehaviour _readNextBehaviour;
+        internal CellRef? AddressCelRef;
+        internal CellRef? NextPopulatedCellRef;
+        internal object NextPopulatedCellValue;
 
         internal SheetReader(Stream sheetXmlStream, XslxSharedStringsStream xlsxSharedStringsStream,
-            XslxIsDateTimeStream xlsxIsDateTimeStream)
+            XslxIsDateTimeStream xlsxIsDateTimeStream, ReadNextBehaviour readNextBehaviour)
         {
             _xlsxSharedStringsStream = xlsxSharedStringsStream;
             _xlsxIsDateTimeStream = xlsxIsDateTimeStream;
             _values = new Dictionary<string, object>();
             _xmlReader = XmlReader.Create(sheetXmlStream);
+            _readNextBehaviour = readNextBehaviour;
             GetDimension();
         }
 
@@ -161,6 +167,7 @@ namespace LightweightExcelReader
             {
                 return null;
             }
+
             switch (nodeType)
             {
                 case "d":
@@ -183,29 +190,84 @@ namespace LightweightExcelReader
             return value;
         }
 
-        private void GetCellAttributesAndReadValue()
+        private KeyValuePair<string, object> ReadNextCell()
         {
             var sType = _xmlReader.GetAttribute("s");
             var nodeType = _xmlReader.GetAttribute("t");
-            Address = _xmlReader.GetAttribute("r");
+            var address = _xmlReader.GetAttribute("r");
+            var newValue = ReadValue(nodeType, sType);
+            return new KeyValuePair<string, object>(address, newValue);
+        }
+
+        private void GetCellAttributesAndReadValue()
+        {
+            var nextCell = ReadNextCell();
+            switch (_readNextBehaviour)
+            {
+                case ReadNextBehaviour.SkipNulls:
+                    Address = nextCell.Key;
+                    Value = nextCell.Value;
+                    break;
+                case ReadNextBehaviour.ReadAllNulls:
+                    //If first cell read:
+                    if (!AddressCelRef.HasValue)
+                    {
+                        Address = nextCell.Key;
+                        Value = nextCell.Value;
+                        AddressCelRef = new CellRef(Address);
+                    }
+                    else
+                    {
+                        var nextCellRef = new CellRef(nextCell.Key);
+                        //If not first cell read bit adjacent to first cell
+                        if (nextCellRef.IsNextAdjacentTo(AddressCelRef))
+                        {
+                            Address = nextCell.Key;
+                            Value = nextCell.Value;
+                            AddressCelRef = nextCellRef;
+                        }
+                        //If not first cell read and not adjacent to first cell
+                        else
+                        {
+                            var nextAdjacent =
+                                AddressCelRef.Value.GetNextAdjacent(WorksheetDimension.BottomRight.ColumnNumber);
+                            Address = nextAdjacent.ToString();
+                            Value = null;
+                            AddressCelRef = nextAdjacent;
+                            NextPopulatedCellRef = nextCellRef;
+                            NextPopulatedCellValue = nextCell.Value;
+                        }
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private object ReadValue(string nodeType, string sType)
+        {
+            object newValue = null;
             while (ReadNextXmlElementAndLogRowNumber())
             {
                 if (_xmlReader.IsStartOfElement("v"))
                 {
                     ReadNextXmlElementAndLogRowNumber();
-                    Value = GetValueFromCell(nodeType, sType);
+                    newValue = GetValueFromCell(nodeType, sType);
                 }
 
                 if (_xmlReader.IsStartOfElement("t"))
                 {
                     ReadNextXmlElementAndLogRowNumber();
-                    Value = _xmlReader.Value;
+                    newValue = _xmlReader.Value;
                 }
+
                 if (_xmlReader.IsEndOfElement("c"))
                 {
                     break;
                 }
             }
+
+            return newValue;
         }
 
         private bool ReadNextXmlElementAndLogRowNumber()
@@ -218,6 +280,16 @@ namespace LightweightExcelReader
             }
 
             return result;
+        }
+
+        private void SetCursorsToCurrentNullValue(string address)
+        {
+            _values[address] = null;
+            AddressCelRef = new CellRef(address);
+            Address = address;
+            Value = null;
+            NextPopulatedCellRef = null;
+            NextPopulatedCellValue = null;
         }
 
         private object GetValue(string address)
@@ -233,10 +305,22 @@ namespace LightweightExcelReader
                     {
                         return Value;
                     }
+
+                    if (CurrentRowNumber == cellRef.Row)
+                    {
+                        var columnLetter = _digitsRegex.Replace(Address, "");
+                        var currentColumnNumber = CellRef.ColumnNameToNumber(columnLetter);
+                        if (currentColumnNumber > cellRef.ColumnNumber)
+                        {
+                            SetCursorsToCurrentNullValue(address);
+                            return null;
+                        }
+                    }
                 }
 
-                if (_xmlReader.IsStartOfElement("row") && int.Parse(_xmlReader.GetAttribute("r")) > cellRef.Row)
+                if (_xmlReader.IsStartOfElement("row") && CurrentRowNumber > cellRef.Row)
                 {
+                    SetCursorsToCurrentNullValue(address);
                     return null;
                 }
             }
@@ -250,15 +334,38 @@ namespace LightweightExcelReader
         /// <returns>False if all cells have been read, true otherwise</returns>
         public bool ReadNext()
         {
+            if (NextPopulatedCellRef.HasValue)
+            {
+                var nextAdjacentCellRef =
+                    AddressCelRef.Value.GetNextAdjacent(WorksheetDimension.BottomRight.ColumnNumber);
+                if (nextAdjacentCellRef == NextPopulatedCellRef)
+                {
+                    AddressCelRef = NextPopulatedCellRef;
+                    Address = NextPopulatedCellRef.ToString();
+                    Value = NextPopulatedCellValue;
+                    NextPopulatedCellRef = null;
+                    NextPopulatedCellValue = null;
+                }
+                else
+                {
+                    Address = nextAdjacentCellRef.ToString();
+                    AddressCelRef = new CellRef(Address);
+                    Value = null;
+                }
+
+                return true;
+            }
+
             while (ReadNextXmlElementAndLogRowNumber())
             {
                 if (_xmlReader.IsStartOfElement("c") && !_xmlReader.IsEmptyElement)
                 {
                     GetCellAttributesAndReadValue();
-                    if (Value == null)
+                    if (Value == null && _readNextBehaviour == ReadNextBehaviour.SkipNulls)
                     {
                         return ReadNext();
                     }
+
                     _values[Address] = Value;
                     return true;
                 }
@@ -375,7 +482,7 @@ namespace LightweightExcelReader
         {
             var cellRef = new CellRef(cellRefString);
             if (cellRef.ColumnNumber > WorksheetDimension.BottomRight.ColumnNumber ||
-                    cellRef.Row > WorksheetDimension.BottomRight.Row)
+                cellRef.Row > WorksheetDimension.BottomRight.Row)
             {
                 return false;
             }
