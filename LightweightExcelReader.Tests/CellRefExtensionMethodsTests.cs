@@ -46,5 +46,23 @@ namespace LightweightExcelReader.Tests
             a1.IsNextAdjacentTo(c3).Should().BeFalse();
             c3.IsNextAdjacentTo(a1).Should().BeFalse();
         }
+        
+        [Fact]
+        public void IntegerIsNextAdjacentWorksForSameRow()
+        {
+            var a1 = new CellRef("A1");
+            var b1 = new CellRef("B1");
+            CellRefExtensionMethods.IsNextAdjacentTo(b1.Row, b1.ColumnNumber, a1.Row, a1.ColumnNumber).Should()
+                .BeTrue();
+        }
+        
+        [Fact]
+        public void IntegerIsNextAdjacentWorksForNextRow()
+        {
+            var a1 = new CellRef("A1");
+            var a2 = new CellRef("A2");
+            CellRefExtensionMethods.IsNextAdjacentTo(a2.Row, a2.ColumnNumber, a1.Row, a1.ColumnNumber).Should()
+                .BeTrue();
+        }
     }
 }

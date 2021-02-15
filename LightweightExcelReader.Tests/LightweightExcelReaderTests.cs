@@ -594,6 +594,41 @@ namespace LightweightExcelReader.Tests
         }
 
         [Fact]
+        public void ReadNextBehaviourReadAllNullsReadsCorrectlyAfterBlankRow()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["E4"].Should().Be(null);
+            sheet.Address.Should().Be("E4");
+            sheet.Value.Should().Be(null);
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("A5");
+            sheet.Value.Should().Be("A5");
+            
+            sheet.ReadNext();
+            sheet.Address.Should().Be("B5");
+            sheet.Value.Should().Be("B5");
+        }
+
+        [Fact]
+        public void ReadNextBehaviourReadAllNullsReadsValueByIndex()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["A2"].Should().Be("A2");
+            sheet.Value.Should().Be("A2");
+        }
+
+        [Fact]
         public void ReadNextBehaviourReadAllNullsWorksCorrectly()
         {
             var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");

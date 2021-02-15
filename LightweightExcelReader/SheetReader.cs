@@ -73,6 +73,38 @@ namespace LightweightExcelReader
                 return value;
             }
         }
+        
+        /// <summary>
+        ///     Indexer. Returns the value of the cell at the given 1-based row and column values, e.g. sheetReader[5,6] returns the value
+        ///     of the cell at row 5, column 6, or null if the cell is empty.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <exception cref="IndexOutOfRangeException">
+        ///     Will throw if the requested index is beyond the used range of the workbook. Avoid this exception by checking the
+        ///     WorksheetDimension or Max/MinRow and Max/MinColumnNumber properties.
+        /// </exception>
+        public object this[int row, int column]
+        {
+            get
+            {
+                var cellRef = new CellRef(row, column);
+                var cellRefString = cellRef.ToString();
+                if (_values.ContainsKey(cellRefString))
+                {
+                    return _values[cellRefString];
+                }
+                
+                if (cellRef.ColumnNumber > WorksheetDimension.BottomRight.ColumnNumber ||
+                    cellRef.Row > WorksheetDimension.BottomRight.Row)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                var value = GetValue(cellRefString);
+                return value;
+            }
+        }
 
         /// <summary>
         ///     Get a list of cell values covered by the range in the index, e.g. sheetReader["A1","B2"] will return a list of four
@@ -135,7 +167,7 @@ namespace LightweightExcelReader
         public object Value { get; private set; }
 
         /// <summary>
-        ///     The row number of the most recently read cell. This will be null if the spreadsheet has not yet been read.
+        ///     The 1-based row number of the most recently read cell. This will be null if the spreadsheet has not yet been read.
         /// </summary>
         public int? CurrentRowNumber { get; private set; }
 
@@ -144,7 +176,12 @@ namespace LightweightExcelReader
         ///     This property is useful when checking for blank rows.
         /// </summary>
         public int? PreviousRowNumber { get; private set; }
+        
 
+        internal int? CurrentColumnNumber { get; private set; }
+        
+        internal int? PreviousColumnNumber { get; private set; }
+        
         private object ReadNumericValueFromSpreadsheet(string sType)
         {
             object value;
@@ -209,8 +246,10 @@ namespace LightweightExcelReader
                     Value = nextCell.Value;
                     break;
                 case ReadNextBehaviour.ReadAllNulls:
+                    PreviousColumnNumber = CurrentColumnNumber;
+                    CurrentColumnNumber = CellRef.ColumnNameToNumber(_digitsRegex.Replace(nextCell.Key, ""));
                     //If first cell read:
-                    if (!AddressCelRef.HasValue)
+                    if (!PreviousColumnNumber.HasValue)
                     {
                         Address = nextCell.Key;
                         Value = nextCell.Value;
@@ -220,7 +259,8 @@ namespace LightweightExcelReader
                     {
                         var nextCellRef = new CellRef(nextCell.Key);
                         //If not first cell read bit adjacent to first cell
-                        if (nextCellRef.IsNextAdjacentTo(AddressCelRef))
+                        if (CellRefExtensionMethods.IsNextAdjacentTo(CurrentRowNumber.Value, CurrentColumnNumber.Value, PreviousRowNumber.HasValue ? PreviousRowNumber.Value : CurrentRowNumber.Value, PreviousColumnNumber.Value))
+                        //if (nextCellRef.IsNextAdjacentTo(AddressCelRef))
                         {
                             Address = nextCell.Key;
                             Value = nextCell.Value;
@@ -282,10 +322,12 @@ namespace LightweightExcelReader
             return result;
         }
 
-        private void SetCursorsToCurrentNullValue(string address)
+        private void SetCursorsToCurrentNullValue(string address, CellRef cellRef)
         {
             _values[address] = null;
             AddressCelRef = new CellRef(address);
+            CurrentRowNumber = cellRef.Row;
+            CurrentColumnNumber = cellRef.ColumnNumber;
             Address = address;
             Value = null;
             NextPopulatedCellRef = null;
@@ -312,7 +354,7 @@ namespace LightweightExcelReader
                         var currentColumnNumber = CellRef.ColumnNameToNumber(columnLetter);
                         if (currentColumnNumber > cellRef.ColumnNumber)
                         {
-                            SetCursorsToCurrentNullValue(address);
+                            SetCursorsToCurrentNullValue(address, cellRef);
                             return null;
                         }
                     }
@@ -320,7 +362,7 @@ namespace LightweightExcelReader
 
                 if (_xmlReader.IsStartOfElement("row") && CurrentRowNumber > cellRef.Row)
                 {
-                    SetCursorsToCurrentNullValue(address);
+                    SetCursorsToCurrentNullValue(address, cellRef);
                     return null;
                 }
             }

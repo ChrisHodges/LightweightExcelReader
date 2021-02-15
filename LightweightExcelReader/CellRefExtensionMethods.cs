@@ -16,6 +16,21 @@ namespace LightweightExcelReader
             }
             return false;
         }
+
+        internal static bool IsNextAdjacentTo(int thisRowNumber, int thisColNumber, int otherRowNumber,
+            int otherColumnNumber)
+        {
+            if (thisRowNumber == otherRowNumber && thisColNumber == otherColumnNumber + 1)
+            {
+                return true;
+            }
+            if (thisRowNumber == otherRowNumber + 1 && thisColNumber == 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
         
         internal static bool IsNextAdjacentTo(this CellRef thisCellRef, CellRef? otherCellRef)
         {
