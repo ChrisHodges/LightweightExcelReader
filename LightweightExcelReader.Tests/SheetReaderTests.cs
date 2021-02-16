@@ -25,10 +25,18 @@ namespace LightweightExcelReader.Tests
         [Fact]
         public void CellRefIndexerWorks()
         {
-            var cellRef = new CellRef("A4");
+            var cellRef = new CellRef("A3");
             var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
             var sheet1 = new ExcelReader(testFileLocation)["Sheet1"];
             sheet1[cellRef].Should().Be("zyx987");
+        }
+        
+        [Fact]
+        public void StringIntIndexerWorks()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var sheet1 = new ExcelReader(testFileLocation)["Sheet1"];
+            sheet1["A",3].Should().Be("zyx987");
         }
     }
 }

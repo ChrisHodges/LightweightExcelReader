@@ -103,6 +103,38 @@ namespace LightweightExcelReader
                 return value;
             }
         }
+
+        /// <summary>
+        ///     Indexer. Returns the value of the cell at the given string column and 1-based integer row values, e.g. sheetReader["C",7] returns the value
+        ///     of the cell at C7, or null if the cell is empty.
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        /// <exception cref="IndexOutOfRangeException">
+        ///     Will throw if the requested index is beyond the used range of the workbook. Avoid this exception by checking the
+        ///     WorksheetDimension or Max/MinRow and Max/MinColumnNumber properties.
+        /// </exception>
+        public object this[string column, int row]
+        {
+            get
+            {
+                var cellRef = new CellRef(row, CellRef.ColumnNameToNumber(column));
+                var cellRefString = cellRef.ToString();
+                if (_values.ContainsKey(cellRefString))
+                {
+                    return _values[cellRefString];
+                }
+                
+                if (cellRef.ColumnNumber > WorksheetDimension.BottomRight.ColumnNumber ||
+                    cellRef.Row > WorksheetDimension.BottomRight.Row)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                var value = GetValue(cellRefString);
+                return value;
+            }
+        }
         
         /// <summary>
         ///     Indexer. Returns the value of the cell at the given 1-based row and column values, e.g. sheetReader[5,6] returns the value
