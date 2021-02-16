@@ -73,6 +73,36 @@ namespace LightweightExcelReader
                 return value;
             }
         }
+
+        /// <summary>
+        ///     Indexer. Returns the value of the cell at the given CellRef, e.g. sheetReader[new CellRef("C3")] returns the value
+        ///     of the cell at C3, if present, or null if the cell is empty.
+        /// </summary>
+        /// <param name="cellRef"></param>
+        /// <exception cref="IndexOutOfRangeException">
+        ///     Will throw if the requested index is beyond the used range of the workbook. Avoid this exception by checking the
+        ///     WorksheetDimension or Max/MinRow and Max/MinColumnNumber properties.
+        /// </exception>
+        public object this[CellRef cellRef]
+        {
+            get
+            {
+                var cellRefString = cellRef.ToString();
+                if (_values.ContainsKey(cellRefString))
+                {
+                    return _values[cellRefString];
+                }
+                
+                if (cellRef.ColumnNumber > WorksheetDimension.BottomRight.ColumnNumber ||
+                    cellRef.Row > WorksheetDimension.BottomRight.Row)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                var value = GetValue(cellRefString);
+                return value;
+            }
+        }
         
         /// <summary>
         ///     Indexer. Returns the value of the cell at the given 1-based row and column values, e.g. sheetReader[5,6] returns the value

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using SpreadsheetCellRef;
 using Xunit;
 
 namespace LightweightExcelReader.Tests
@@ -19,6 +20,15 @@ namespace LightweightExcelReader.Tests
             var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
             var sheet1 = new ExcelReader(testFileLocation)["Sheet1"];
             sheet1[3,1].Should().Be("zyx987");
+        }
+        
+        [Fact]
+        public void CellRefIndexerWorks()
+        {
+            var cellRef = new CellRef("A4");
+            var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
+            var sheet1 = new ExcelReader(testFileLocation)["Sheet1"];
+            sheet1[cellRef].Should().Be("zyx987");
         }
     }
 }
