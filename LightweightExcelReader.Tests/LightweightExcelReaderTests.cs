@@ -178,7 +178,8 @@ namespace LightweightExcelReader.Tests
             sheet1.ContainsKey("AA20000").Should().Be(false);
         }
 
-        [Fact] public void GetFirstDateTimeStyleWorks()
+        [Fact] 
+        public void GetFirstDateTimeStyleWorks()
         {
             var testFileLocation = TestHelper.TestsheetPath("TestSpreadsheet1.xlsx");
             var lightWeightExcelReader = new ExcelReader(testFileLocation);
