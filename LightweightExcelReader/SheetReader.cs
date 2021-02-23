@@ -248,7 +248,17 @@ namespace LightweightExcelReader
             }
             else
             {
-                value = double.Parse(_xmlReader.Value, CultureInfo.InvariantCulture);
+                try
+                {
+                    value = double.Parse(_xmlReader.Value, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException)
+                {
+                    //If we're here it means that the cell is of type number, but the value is a string. This happens
+                    //when Excel returns an non-numeric result of a calculation, typically an Excel error string, e.g. #N/A, Err:522, etc
+                    //If this occurs we just return the string value of the cell.
+                    value = _xmlReader.Value;
+                }
             }
 
             return value;
