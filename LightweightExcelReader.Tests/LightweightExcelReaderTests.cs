@@ -630,6 +630,17 @@ namespace LightweightExcelReader.Tests
         }
 
         [Fact]
+        public void HandleInvalidFormula()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("HandleInvalidFormulaTest.xlsx");
+            var sheet1 = new ExcelReader(testFileLocation)["Sheet1"];
+            sheet1["A1"].Should().Be("#DIV/0!");
+            sheet1["A2"].Should().Be("#N/A");
+            sheet1["A3"].Should().Be("#VALUE!");
+            sheet1["A4"].Should().Be("#N/A");
+        }
+
+        [Fact]
         public void ReadNextBehaviourReadAllNullsWorksCorrectly()
         {
             var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
