@@ -730,5 +730,33 @@ namespace LightweightExcelReader.Tests
 
             sheet.ReadNext().Should().BeFalse();
         }
+
+        [Fact]
+        public void ReadNextBehaviourReadAllNullsReadNextInRowWorksCorrectly()
+        {
+            var testFileLocation = TestHelper.TestsheetPath("ReadNextBehaviour.xlsx");
+            var lightWeightExcelReader = new ExcelReader(testFileLocation)
+            {
+                ReadNextBehaviour = ReadNextBehaviour.ReadAllNulls
+            };
+            var sheet = lightWeightExcelReader[0];
+            sheet["A2"].Should().Be("A2");
+            sheet.Value.Should().Be("A2");
+
+            sheet.ReadNext();
+            sheet.Value.Should().Be(null);
+            sheet.Address.Should().Be("B2");
+
+            sheet.ReadNextInRow();
+            sheet.Value.Should().Be("C2");
+
+            sheet.ReadNextInRow();
+            sheet.Value.Should().Be(null);
+
+            sheet.ReadNextInRow();
+            sheet.Value.Should().Be("E2");
+
+            sheet.ReadNextInRow().Should().BeFalse();
+        }
     }
 }
