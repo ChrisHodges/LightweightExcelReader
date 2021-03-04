@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -23,6 +24,13 @@ namespace LightweightExcelReader.Tests
             var testSpreadsheetLocation = Path.Combine(assemblyPath, "TestXml", fileName);
             File.Exists(testSpreadsheetLocation).Should().BeTrue();
             return new FileStream(testSpreadsheetLocation, FileMode.OpenOrCreate, FileAccess.Read);
+        }
+
+        public static void SetupUKCulture()
+        {
+            var cultureInfo = new CultureInfo("en-UK");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
     }
 }

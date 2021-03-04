@@ -11,6 +11,11 @@ namespace LightweightExcelReader.Tests
 {
     public class LightweightExcelReaderTests
     {
+        public LightweightExcelReaderTests()
+        {
+            TestHelper.SetupUKCulture();
+        }
+
         [Fact]
         public void BySheetIndexWorks()
         {

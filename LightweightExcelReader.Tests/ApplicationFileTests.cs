@@ -7,6 +7,11 @@ namespace LightweightExcelReader.Tests
 {
     public class ApplicationFileTests
     {
+        public ApplicationFileTests()
+        {
+            TestHelper.SetupUKCulture();
+        }
+
         [Fact]
         public void LibreOffice()
         {
