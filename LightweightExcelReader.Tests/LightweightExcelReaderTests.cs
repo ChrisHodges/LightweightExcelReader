@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
+using LightweightExcelReader.Tests.TestHelpers;
 using Xunit;
 
 namespace LightweightExcelReader.Tests

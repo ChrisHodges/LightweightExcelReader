@@ -244,7 +244,7 @@ namespace LightweightExcelReader
             object value;
             if (sType != null && _xlsxIsDateTimeStream[int.Parse(sType)])
             {
-                value = DateTime.FromOADate(double.Parse(_xmlReader.Value));
+                value = DateTime.FromOADate(double.Parse(_xmlReader.Value, CultureInfo.InvariantCulture));
             }
             else
             {

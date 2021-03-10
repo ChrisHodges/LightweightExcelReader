@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using FluentAssertions;
+using LightweightExcelReader.Tests.TestHelpers;
 using Xunit;
 
 namespace LightweightExcelReader.Tests
 {
     public class ApplicationFileTests
     {
-        [Fact]
-        public void LibreOffice()
+
+        [Theory]
+        [ClassData(typeof(CultureGenerator))]
+        public void LibreOffice(CultureInfo cultureInfo)
         {
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             var testFileLocation = TestHelper.TestsheetPath("Applications/LibreOffice.xlsx");
             var excelReader = new ExcelReader(testFileLocation);
             var sheet = excelReader[0];
@@ -34,9 +39,11 @@ namespace LightweightExcelReader.Tests
             dictionary.Count.Should().Be(10);
         }
         
-        [Fact]
-        public void Numbers()
+        [Theory]
+        [ClassData(typeof(CultureGenerator))]
+        public void Numbers(CultureInfo cultureInfo)
         {
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             var testFileLocation = TestHelper.TestsheetPath("Applications/Numbers.xlsx");
             var excelReader = new ExcelReader(testFileLocation);
             var sheet = excelReader[0];
@@ -60,10 +67,12 @@ namespace LightweightExcelReader.Tests
             
             dictionary.Count.Should().Be(10);
         }
-        
-        [Fact]
-        public void GoogleSheets()
+
+        [Theory]
+        [ClassData(typeof(CultureGenerator))]
+        public void GoogleSheets(CultureInfo cultureInfo)
         {
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             var testFileLocation = TestHelper.TestsheetPath("Applications/GoogleSheets.xlsx");
             var excelReader = new ExcelReader(testFileLocation);
             var sheet = excelReader[0];
@@ -77,7 +86,7 @@ namespace LightweightExcelReader.Tests
             dictionary["B1"].Should().Be(1);
             dictionary["C1"].Should().Be(1.2);
             dictionary["D1"].Should().Be(1.23);
-            dictionary["E1"].Should().Be(new DateTime(2020,1,1));//CSH 010120 Apple Numbers saves DateTimes in number format
+            dictionary["E1"].Should().Be(new DateTime(2020,1,1));
             dictionary["F1"].Should().Be("String");
             dictionary["G1"].Should().Be(1);
             dictionary["H1"].Should().Be(new DateTime(2020,1,1));
@@ -87,9 +96,11 @@ namespace LightweightExcelReader.Tests
             dictionary.Count.Should().Be(10);
         }
         
-        [Fact]
-        public void ExcelOnline()
+        [Theory]
+        [ClassData(typeof(CultureGenerator))]
+        public void ExcelOnline(CultureInfo cultureInfo)
         {
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             var testFileLocation = TestHelper.TestsheetPath("Applications/ExcelOnline.xlsx");
             var excelReader = new ExcelReader(testFileLocation);
             var sheet = excelReader[0];
@@ -103,7 +114,7 @@ namespace LightweightExcelReader.Tests
             dictionary["B1"].Should().Be(1);
             dictionary["C1"].Should().Be(1.2);
             dictionary["D1"].Should().Be(1.23);
-            dictionary["E1"].Should().Be(new DateTime(2020,1,1));//CSH 010120 Apple Numbers saves DateTimes in number format
+            dictionary["E1"].Should().Be(new DateTime(2020,1,1));
             dictionary["F1"].Should().Be("String");
             dictionary["G1"].Should().Be(1);
             dictionary["H1"].Should().Be(new DateTime(2020,1,1));

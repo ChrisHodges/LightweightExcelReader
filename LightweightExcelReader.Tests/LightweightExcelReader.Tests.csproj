@@ -76,9 +76,11 @@
     <Compile Include="ApplicationFileTests.cs" />
     <Compile Include="CellRefExtensionMethodsTests.cs" />
     <Compile Include="LightweightExcelReaderTests.cs" />
+    <Compile Include="OleAutomationDateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SheetReaderTests.cs" />
     <Compile Include="TestHelper.cs" />
+    <Compile Include="TestHelpers\CultureGenerator.cs" />
     <Compile Include="XlsxDateTimeStreamtests.cs" />
   </ItemGroup>
   <ItemGroup>
