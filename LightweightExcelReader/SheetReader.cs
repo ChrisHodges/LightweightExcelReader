@@ -546,6 +546,10 @@ namespace LightweightExcelReader
         /// <returns>An enumerable of objects representing the values of cells in the row</returns>
         public IEnumerable<object> Row(int row)
         {
+            if (row > MaxColumnNumber)
+            {
+                throw new IndexOutOfRangeException();
+            }
             var topLeft = new CellRef(row, MinColumnNumber);
             var bottomRight = new CellRef(row, MaxColumnNumber);
             return this[topLeft.ToString(), bottomRight.ToString()];
