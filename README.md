@@ -72,8 +72,8 @@ You bet. We've aimed to create the fastest Excel reader for .Net, and we think w
 ### Is LightweightExcelReader right for me?
 LightweightExcelReader is right for you if:
 
-* You only want to read Excel data - you don't want to create or edit a spreadsheet.
-* You only need to read .xlsx format files (Excel 2007 and later). If you need to read old style .xls files, 
+* You only want to *read* Excel data - you don't want to create or edit a spreadsheet.
+* You only need to read .xlsx format files (Excel 2007 and later).
 * You don't want to map spreadsheet data into a collection of objects.
 
 If you want to map a spreadsheet to a collection of objects, use our sister project, [ExcelToEnumerable](https://github.com/ChrisHodges/ExcelToEnumerable)
