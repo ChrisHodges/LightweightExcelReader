@@ -21,6 +21,22 @@ namespace LightweightExcelReader
         private Dictionary<int, SheetReader> _sheetReadersByInteger;
         private ZippedXlsxFile _zippedXlsxFile;
 
+        public void Dispose()
+        {
+            if(_zippedXlsxFile != null)
+            {
+                _zippedXlsxFile.Dispose();
+            }
+            if(_sheetNameXmlReader != null)
+            {
+                _sheetNameXmlReader.Dispose();
+            }
+            foreach(SheetReader sht in _sheetReadersByInteger.Values)
+            {
+                sht.Dispose();
+            }
+        }
+
         /// <summary>
         /// Construct an ExcelReader from a file path
         /// </summary>

@@ -11,6 +11,14 @@ namespace LightweightExcelReader
         private readonly XmlReader _xmlReader;
         private int _readIndex = -1;
 
+        public void Dispose()
+        {
+            if(_xmlReader != null)
+            {
+                _xmlReader.Dispose();
+            }
+        }
+
         internal XslxSharedStringsStream(Stream xmlStream)
         {
             _xmlReader = XmlReader.Create(xmlStream,

@@ -31,6 +31,23 @@ namespace LightweightExcelReader
         internal CellRef? NextPopulatedCellRef;
         internal object NextPopulatedCellValue;
 
+
+        public void Dispose()
+        {
+            if(_xmlReader != null)
+            {
+                _xmlReader.Dispose();
+            }
+            if(_xlsxIsDateTimeStream != null)
+            {
+                _xlsxIsDateTimeStream.Dispose();
+            }
+            if(_xlsxSharedStringsStream != null)
+            {
+                _xlsxSharedStringsStream.Dispose();
+            }
+        }
+
         internal SheetReader(Stream sheetXmlStream, XslxSharedStringsStream xlsxSharedStringsStream,
             XslxIsDateTimeStream xlsxIsDateTimeStream, ReadNextBehaviour readNextBehaviour)
         {
